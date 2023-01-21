@@ -1,0 +1,18 @@
+<project>
+    <modelVersion>1.0.0</modelVersion>
+    <groupId>FOP</groupId>
+    <artifactId>FOP-assignment</artifactId>
+    <version>1.0</version>
+    <packaging>jar</packaging>
+    <properties>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>tech.tablesaw</groupId>
+            <artifactId>tablesaw-core</artifactId>
+            <version>LATEST</version>
+        </dependency>
+    </dependencies>
+</project>
+
+
