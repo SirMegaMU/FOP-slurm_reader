@@ -1,76 +1,101 @@
-package src.main;
-
-import tech.tablesaw.api.DateColumn;
 import tech.tablesaw.api.IntColumn;
 import tech.tablesaw.api.StringColumn;
 import tech.tablesaw.api.Table;
 
+import java.io.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Main {
-    public void main(String[] args) throws ParseException {
-        System.out.print(jobs);
+    public void main(String[] args) throws ParseException, FileNotFoundException {
+
 
     }
 
+    public void readfile() {
+        try {
+            Scanner file_scanner = new Scanner(new File("./extracted_log"));
+            while (file_scanner.hasNextLine()) {
+                String line = file_scanner.nextLine();
+
+                // [2022-06-01T01:02:35.148] _slurm_rpc_submit_batch_job: JobId=42802 InitPrio=19758 usec=589
+                Pattern submit = Pattern.compile("\\[(.*T.*)\\] _slurm_rpc_submit_batch_job: JobId=([0-9]*) InitPrio=([0-9]*) usec=([0-9]*)\s");
+                // [2022-06-01T01:02:36.012] sched: Allocate JobId=42802 NodeList=gpu05 #CPUs=32 Partition=gpu-v100s
+                Pattern sched = Pattern.compile("\\[(.*T.*)\\] sched: Allocate JobId=([0-9]*) NodeList=(.*?) #CPUs=([0-9]*) Partition=(.*)\s");
+                //[2022-06-01T04:05:04.581] _job_complete: JobId=42801 WEXITSTATUS 2
+                Pattern complete = Pattern.compile("\\[(.*T.*)\\] _job_complete: JobId=[0-9]* (.*)\s");
+                // [2022-06-01T15:12:23.290] error: This association 187(account='free', user='lobbeytan', partition='(null)') does not have access to qos long
+                Pattern error = Pattern.compile("\\[(.*T.*)\\] error: This association ([0-9]*)\\(account='(.*)', user='(.*)', partition='(.*)'\\) (.*?)\s");
+                // [2022-06-01T10:39:24.178] _slurm_rpc_kill_job: REQUEST_KILL_JOB JobId=42819 uid 548200029
+                Pattern kill = Pattern.compile("\\[(.*T.*)\\] _slurm_rpc_kill_job: REQUEST_KILL_JOB JobId=([0-9]*) uid ([0-9]*)]\s");
+
+                //slurm_job job = new slurm_job();
+
+                //job_map.put();
+
+            }
+            file_scanner.close();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public HashMap<Integer, slurm_job> job_map = new HashMap<Integer, slurm_job>();
     public Table jobs = Table.create("Jobs table").addColumns(
             IntColumn.create("JobId"),
             StringColumn.create("Main"),
             IntColumn.create("InitPrio"),
             IntColumn.create("usec"),
             IntColumn.create("uid"),
-            StringColumn.create("sched"),
             StringColumn.create("NodeList"),
             StringColumn.create("CPUs"),
             StringColumn.create("Partition"),
             StringColumn.create("status"),
-            DateColumn.create("start"),
-            DateColumn.create("end")
+            StringColumn.create("start"),
+            StringColumn.create("end")
     );
 
     public class slurm_job {
         int JobId, InitPrio, usec, uid;
-        String job, sched, NodeList, CPUs, Partition, status;
-        List<Date> dates = new ArrayList();
+        String job, NodeList, CPUs, Partition, status;
+        Date start, end;
 
         public slurm_job(int JobId) {
             this.JobId = JobId;
         }
 
-        public Date add_time(String s_time) throws ParseException {
+        public void add_time(String s_time) throws ParseException {
             //2022-06-01T09:10:34.641
             SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-ddTHH:mm:ss.SSS");
-            try {
-                this.dates.add(ft.parse(s_time));
-                return ft.parse(s_time);
-            } catch (ParseException e) {
-                throw new RuntimeException(e);
+            if (this.start == null) {
+                this.start = ft.parse(s_time);
+            } else {
+                this.end = ft.parse(s_time);
             }
         }
 
         public void end(String s_status) {
             this.status = s_status;
-
             Table job = Table.create("Jobs table").addColumns(
                     IntColumn.create("JobId", new int[]{this.JobId}),
                     StringColumn.create("Main", new String[]{this.job}),
                     IntColumn.create("InitPrio", new int[]{this.InitPrio}),
                     IntColumn.create("usec", new int[]{this.usec}),
                     IntColumn.create("uid", new int[]{this.uid}),
-                    StringColumn.create("sched", new String[]{this.sched}),
                     StringColumn.create("NodeList", new String[]{this.NodeList}),
                     StringColumn.create("CPUs", new String[]{this.CPUs}),
                     StringColumn.create("Partition", new String[]{this.Partition}),
                     StringColumn.create("status", new String[]{this.status}),
-                    DateColumn.create("start"),
-                    DateColumn.create("end")
+                    StringColumn.create("start", new String[]{this.start.toString()}),
+                    StringColumn.create("end", new String[]{this.end.toString()})
             );
-
             jobs.appendRow();
+            job_map.remove(this.JobId);
         }
     }
 
