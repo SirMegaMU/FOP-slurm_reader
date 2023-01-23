@@ -56,13 +56,13 @@
 
 ***
 
-***indicates a src.main.job has been started, and ***
+***indicates a src.main.Main has been started, and ***
 
 ***\_job\_complete: JobId=50096 done
 
 ***
 
-***indicates src.main.job has ended.***
+***indicates src.main.Main has ended.***
 
 ***Your task:***
 
