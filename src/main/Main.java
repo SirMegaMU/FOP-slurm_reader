@@ -25,9 +25,11 @@ public class Main {
             while (file_scanner.hasNextLine()) {
                 String line = file_scanner.nextLine();
                 int JobId = 0, InitPrio = 0, usec = 0, uid = 0, CPUs = 0;
-                String NodeList, Partition, status;
+                String NodeList = "", Partition = "", status = "";
                 Date start, end;
                 Matcher m;
+
+                int marker = 0;
 
                 // [2022-06-01T01:02:35.148] _slurm_rpc_submit_batch_job: JobId=42802 InitPrio=19758 usec=589
                 String submit_p = "\\[(.*T.*)\\] _slurm_rpc_submit_batch_job: JobId=([0-9]*) InitPrio=([0-9]*) usec=([0-9]*)\s";
@@ -50,32 +52,57 @@ public class Main {
                     JobId = Integer.parseInt(m.group(0));
                     InitPrio = Integer.parseInt(m.group(1));
                     usec = Integer.parseInt(m.group(2));
+                    marker = 1;
                 } else if (Pattern.matches(sched_p, line)) {
                     m = sched.matcher(line);
                     JobId = Integer.parseInt(m.group(0));
                     NodeList = m.group(1);
                     CPUs = Integer.parseInt(m.group(2));
                     Partition = m.group(3);
+                    marker = 2;
                 } else if (Pattern.matches(complete_p, line)) {
                     m = complete.matcher(line);
                     JobId = Integer.parseInt(m.group(0));
                     status = m.group(1);
+                    marker = 3;
                 } else if (Pattern.matches(error_p, line)) {
                     m = kill.matcher(line);
                     JobId = Integer.parseInt(m.group(0));
                     uid = Integer.parseInt(m.group(1));
+                    marker = 4;
                 } else if (Pattern.matches(kill_p, line)) {
                 }
                 if (JobId != 0) {
                     if (job_map.containsKey(JobId)) {
-
+                        if (marker == 1) {
+                            job_map.get(JobId).InitPrio = InitPrio;
+                            job_map.get(JobId).usec = usec;
+                        } else if (marker == 2) {
+                            job_map.get(JobId).NodeList = NodeList;
+                            job_map.get(JobId).CPUs = CPUs;
+                            job_map.get(JobId).Partition = Partition;
+                        } else if (marker == 3) {
+                            job_map.get(JobId).status = status;
+                        } else if (marker == 4) {
+                            job_map.get(JobId).uid = uid;
+                        }
                     } else {
                         slurm_job job = new slurm_job(JobId);
                         job_map.put(JobId, job);
+                        if (marker == 1) {
+                            job_map.get(JobId).InitPrio = InitPrio;
+                            job_map.get(JobId).usec = usec;
+                        } else if (marker == 2) {
+                            job_map.get(JobId).NodeList = NodeList;
+                            job_map.get(JobId).CPUs = CPUs;
+                            job_map.get(JobId).Partition = Partition;
+                        } else if (marker == 3) {
+                            job_map.get(JobId).status = status;
+                        } else if (marker == 4) {
+                            job_map.get(JobId).uid = uid;
+                        }
                     }
                 }
-
-
             }
             file_scanner.close();
         } catch (FileNotFoundException e) {
