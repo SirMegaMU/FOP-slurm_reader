@@ -10,7 +10,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="FOP-Assignment" target="19" />
+      <module name="FOP-Assignment" target="15" />
     </bytecodeTargetLevel>
   </component>
 </project>
