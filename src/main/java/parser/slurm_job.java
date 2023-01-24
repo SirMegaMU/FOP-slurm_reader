@@ -7,9 +7,9 @@ import tech.tablesaw.api.Table;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 import static data_structure.data.*;
+import static formatter.time_formatter.toLocalDateTime;
 
 public class slurm_job {
     public int JobId, InitPrio, usec, uid, CPUs;
@@ -18,12 +18,6 @@ public class slurm_job {
 
     public slurm_job(int JobId) {
         this.JobId = JobId;
-    }
-
-    public static LocalDateTime toLocalDateTime(String dateTime) {
-        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
-        LocalDateTime ldt = LocalDateTime.parse(dateTime, df);
-        return ldt;
     }
 
     public void add_time(String s_time) {

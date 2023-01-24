@@ -23,4 +23,12 @@ public class data {
             DateColumn.create("start"),
             DateColumn.create("end")
     );
+
+    public static Table errors = Table.create("Errors").addColumns(
+            DateColumn.create("job_time"),
+            IntColumn.create("association"),
+            StringColumn.create("account"),
+            StringColumn.create("user"),
+            StringColumn.create("Partition")
+    );
 }

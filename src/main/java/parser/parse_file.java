@@ -7,14 +7,16 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class readfile {
+import static parser.slurm_error.add_error;
+
+public class parse_file {
     public static void readfile(HashMap<Integer, slurm_job> job_map) {
         try {
             Scanner file_scanner = new Scanner(new File("src/main/resources/extracted_log"));
             while (file_scanner.hasNextLine()) {
                 String line = file_scanner.nextLine();
-                int JobId = 0, InitPrio = 0, usec = 0, uid = 0, CPUs = 0;
-                String NodeList = "", Partition = "", status = "";
+                int JobId = 0, InitPrio = 0, usec = 0, uid = 0, CPUs = 0, association = 0;
+                String NodeList = "", Partition = "", status = "", account = "", user = "";
                 String time = "";
                 Matcher m;
 
@@ -29,7 +31,7 @@ public class readfile {
                 //[2022-06-01T04:05:04.581] _job_complete: JobId=42801 WEXITSTATUS 2
                 String complete_p = "\\[(.*T.*)\\] _job_complete: JobId=([0-9]*) (.*)";
                 Pattern complete = Pattern.compile(complete_p);
-                // [2022-06-01T15:12:23.290] error: This association 187(account='free', user='lobbeytan', partition='(null)') does not have access to qos long
+                // [2022-06-01T15:12:23.290] error_str: This association 187(account='free', user='lobbeytan', job_str='(null)') does not have access to qos long
                 String error_p = "\\[(.*T.*)\\] error: This association ([0-9]*)\\(account='(.*)', user='(.*)', partition='(.*)'\\) (.*?)";
                 Pattern error = Pattern.compile(error_p);
                 // [2022-06-01T10:39:24.178] _slurm_rpc_kill_job: REQUEST_KILL_JOB JobId=42819 uid 548200029
@@ -61,14 +63,16 @@ public class readfile {
                     status = m.group(3);
                     marker = 3;
                 } else if (Pattern.matches(error_p, line)) {
-                    System.out.println("error match");
+                    System.out.println("error_str match");
                     m = kill.matcher(line);
                     time = m.group(1);
-                    JobId = Integer.parseInt(m.group(2));
-                    uid = Integer.parseInt(m.group(3));
-                    marker = 4;
-                } else if (Pattern.matches(kill_p, line)) {
+                    association = Integer.parseInt(m.group(2));
+                    account = m.group(3);
+                    user = m.group(4);
+                    Partition = m.group(5);
+                    add_error(time, association, account, user, Partition);
                 }
+
                 if (JobId != 0) {
                     if (job_map.containsKey(JobId)) {
                         if (marker == 1) {
@@ -82,8 +86,6 @@ public class readfile {
                         } else if (marker == 3) {
                             job_map.get(JobId).status = status;
                             job_map.get(JobId).add_time(time);
-                        } else if (marker == 4) {
-                            job_map.get(JobId).uid = uid;
                         }
                     } else {
                         slurm_job job = new slurm_job(JobId);
@@ -99,8 +101,6 @@ public class readfile {
                         } else if (marker == 3) {
                             job_map.get(JobId).end(status);
                             job_map.get(JobId).add_time(time);
-                        } else if (marker == 4) {
-                            job_map.get(JobId).uid = uid;
                         }
                     }
                 }
