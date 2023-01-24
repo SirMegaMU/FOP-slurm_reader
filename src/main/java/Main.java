@@ -1,5 +1,3 @@
-package src.main;
-
 import tech.tablesaw.api.IntColumn;
 import tech.tablesaw.api.StringColumn;
 import tech.tablesaw.api.Table;
@@ -15,13 +13,12 @@ import java.util.regex.Pattern;
 
 public class Main {
     public void main(String[] args) throws ParseException, FileNotFoundException {
-
-
+        readfile();
     }
 
     public void readfile() {
         try {
-            Scanner file_scanner = new Scanner(new File("./extracted_log"));
+            Scanner file_scanner = new Scanner(new File("src/main/resources/extracted_log"));
             while (file_scanner.hasNextLine()) {
                 String line = file_scanner.nextLine();
                 int JobId = 0, InitPrio = 0, usec = 0, uid = 0, CPUs = 0;

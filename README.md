@@ -1,6 +1,6 @@
 # FOP-Assignment
 
-***Background information: ***
+Background information: 
 
 *Modern scientific collaborations have opened the opportunity of solving complex problems that involve multidisciplinary expertise and large-scale computational experiments. These experiments comprise a sequence of processing steps, or referred as tasks, that need to be executed on selected computing platforms. To support this research, UM has formed the Data Intensive Computing Centre (DICC)*\[1\] *to provide High Performance Computing (HPC) services to the campus community.*
 
@@ -22,13 +22,12 @@
 
 *Figure 1 shows a brief overview of the architecture of UMHPC.*
 
-![Diagram Description automatically generated](media/image1.png)
 
 **Figure 1: Architecture of UMHPC**
 
 *To ensure the quality of services provided, the DICC team has deployed necessary monitoring tools to ensure the availability and stability of the system. Going through the system log files has become a daily routine for the HPC specialist in DICC for system health check. The HPC specialist will define the performance metrics and try to extract the required information from the million rows of log file. This not only require a very understanding of the HPC system, but also a very sound programming skill to make sense from these log files.*
 
-***A real-world log file of the SLURM scheduler has been given in this assignment. ***
+A real-world log file of the SLURM scheduler has been given in this assignment. 
 
 ***\[2022-06-01T09:16:23.166\] \_slurm\_rpc\_submit\_batch\_job: JobId=42808 InitPrio=20861 usec=331***
 
@@ -52,17 +51,17 @@
 
 ***From the sample above,***
 
-***sched: Allocate JobId=50096 NodeList=gpu03 \#CPUs=16 Partition=gpu-k10
+sched: Allocate JobId=50096 NodeList=gpu03 \#CPUs=16 Partition=gpu-k10
 
 ***
 
-***indicates a src.main.Main has been started, and ***
+indicates a src.main.java.Main has been started, and 
 
-***\_job\_complete: JobId=50096 done
+\_job\_complete: JobId=50096 done
 
 ***
 
-***indicates src.main.Main has ended.***
+***indicates src.main.java.Main has ended.***
 
 ***Your task:***
 
@@ -70,7 +69,7 @@
 
 2.  *Write a program to extract the useful information and show in **table** and **graph**.*
 
-3.  *Some of the interesting metrics include (but not limited to): *
+3.  Some of the interesting metrics include (but not limited to): 
 
     1.  *Number of jobs created/ended within a given time range.*
 
@@ -98,7 +97,7 @@
 
     - *The architectural design: The source code developed to solve the problem.*
 
-    - *The result and finding: The sample output of the program and the discussion on the challenges and issues you faced in developing the solutions. *
+    - *The result and finding: The sample output of the program and the discussion on the challenges and issues you faced in developing the solutions. 
 
 - ***The presentation: 5 marks***
 
