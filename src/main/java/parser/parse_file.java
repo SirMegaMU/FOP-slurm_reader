@@ -78,11 +78,11 @@ public class parse_file {
                         System.out.println("* kill      \t\t match");
                         parse_success++;
                     } else if (m5.find()) {
-                        time = m5.group(0);
-                        association = Integer.parseInt(m5.group(1));
-                        account = m5.group(2);
-                        user = m5.group(3);
-                        Partition = m5.group(4);
+                        time = m5.group(1);
+                        association = Integer.parseInt(m5.group(2));
+                        account = m5.group(3);
+                        user = m5.group(4);
+                        Partition = m5.group(5);
                         add_error(time, association, account, user, Partition);
                         System.out.println("* error     \t\t match");
                         parse_success++;
