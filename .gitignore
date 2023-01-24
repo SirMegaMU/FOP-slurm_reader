@@ -1,4 +1,4 @@
-src/test/out/*
-src/test/.idea/*
 src/test/test.iml
-.idea/*
+/src/test/.idea/
+/src/test/out/
+/.idea/
