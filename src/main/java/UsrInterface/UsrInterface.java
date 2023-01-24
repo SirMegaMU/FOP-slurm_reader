@@ -11,7 +11,7 @@ import static filter.job_str.job_get_by_string;
 import static filter.job_time.job_get_by_time;
 
 public class UsrInterface {
-    public void main_page() {
+    public static void main_page() {
         System.out.println("\n\n");
         System.out.println("------------------------------");
         System.out.println("* 1 : show data");
@@ -53,7 +53,7 @@ public class UsrInterface {
         }
     }
 
-    public void show_data(String name) {
+    public static void show_data(String name) {
         if (name == "jobs") {
             System.out.println(jobs);
         } else if (name == "errors") {
@@ -68,7 +68,7 @@ public class UsrInterface {
         }
     }
 
-    public void filter_by_str(String name, String filter, String content) {
+    public static void filter_by_str(String name, String filter, String content) {
         if (name == "jobs") {
             job_get_by_string(jobs, filter, content);
         } else if (name == "errors") {
@@ -83,7 +83,7 @@ public class UsrInterface {
         }
     }
 
-    public void filter_by_time(String name, String start, String end) {
+    public static void filter_by_time(String name, String start, String end) {
         if (name == "jobs") {
             job_get_by_time(jobs, start, end);
         } else if (name == "errors") {

@@ -3,6 +3,7 @@ import java.text.ParseException;
 
 import parser.*;
 
+import static UsrInterface.UsrInterface.*;
 import static data_structure.data.*;
 
 public class Main {
@@ -14,5 +15,6 @@ public class Main {
         System.out.println("\n****************************************");
         System.out.println("**********      complete      **********");
         System.out.println("****************************************");
+        main_page();
     }
 }
