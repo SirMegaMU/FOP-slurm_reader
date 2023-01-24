@@ -2,7 +2,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
 import java.util.Scanner;
 
-class tmp {
+public class tmp {
     public static void main(String[] args) {
         Scanner key = new Scanner(System.in);
         String time_s = key.next();
