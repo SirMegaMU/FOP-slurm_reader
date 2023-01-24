@@ -19,10 +19,12 @@ public class Main {
         System.out.println("****************************************");
         System.out.println("**********   loading files    **********");
         System.out.println("****************************************\n");
-        parse_file.readfile(file_loc, job_map);
-        System.out.println("\n****************************************");
+        int[] res = parse_file.readfile(file_loc, job_map);
+        System.out.println("****************************************");
         System.out.println("**********      complete      **********");
         System.out.println("****************************************");
+        System.out.println("* success : "+res[0]);
+        System.out.println("* fail    : "+res[1]);
         main_page();
     }
 }

@@ -30,6 +30,9 @@ public class slurm_job {
     }
 
     public void end(String s_status) {
+        if (this.end == null) {
+            this.end = this.start;
+        }
         this.status = s_status;
         Table job = Table.create("Jobs table").addColumns(
                 IntColumn.create("JobId", new int[]{this.JobId}),
