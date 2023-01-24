@@ -15,8 +15,9 @@ public class Main {
         System.out.println("*****  type the path of log file   *****");
         System.out.print("* > :");
         file_loc = key.next();
+        file_loc = "/home/megamu/Documents/FOP-Assignment/src/main/resources/extracted_log";
         System.out.println("****************************************");
-        System.out.println("**********   loading files   **********");
+        System.out.println("**********   loading files    **********");
         System.out.println("****************************************\n");
         parse_file.readfile(file_loc, job_map);
         System.out.println("\n****************************************");

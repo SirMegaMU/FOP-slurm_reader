@@ -10,11 +10,14 @@ import java.util.regex.Pattern;
 import static parser.slurm_error.add_error;
 
 public class parse_file {
-    public static void readfile(String fileloc,HashMap<Integer, slurm_job> job_map) {
+    public static void readfile(String fileloc, HashMap<Integer, slurm_job> job_map) {
         try {
             Scanner file_scanner = new Scanner(new File(fileloc));
             while (file_scanner.hasNextLine()) {
-                String line = file_scanner.nextLine();
+                String line = file_scanner.nextLine() + " ";
+
+                System.out.println(line);
+
                 int JobId = 0, InitPrio = 0, usec = 0, uid = 0, CPUs = 0, association = 0;
                 String NodeList = "", Partition = "", status = "", account = "", user = "";
                 String time = "";
@@ -37,40 +40,43 @@ public class parse_file {
                 // [2022-06-01T10:39:24.178] _slurm_rpc_kill_job: REQUEST_KILL_JOB JobId=42819 uid 548200029
                 String kill_p = "\\[(.*T.*)\\] _slurm_rpc_kill_job: REQUEST_KILL_JOB JobId=([0-9]*) uid ([0-9]*)";
                 Pattern kill = Pattern.compile(kill_p);
-
-                if (Pattern.matches(submit_p, line)) {
-                    System.out.println("submit match");
-                    m = submit.matcher(line);
-                    time = m.group(1);
-                    JobId = Integer.parseInt(m.group(2));
-                    InitPrio = Integer.parseInt(m.group(3));
-                    usec = Integer.parseInt(m.group(4));
-                    marker = 1;
-                } else if (Pattern.matches(sched_p, line)) {
-                    System.out.println("sched match");
-                    m = sched.matcher(line);
-                    time = m.group(1);
-                    JobId = Integer.parseInt(m.group(2));
-                    NodeList = m.group(3);
-                    CPUs = Integer.parseInt(m.group(4));
-                    Partition = m.group(5);
-                    marker = 2;
-                } else if (Pattern.matches(complete_p, line)) {
-                    System.out.println("complete match");
-                    m = complete.matcher(line);
-                    time = m.group(1);
-                    JobId = Integer.parseInt(m.group(2));
-                    status = m.group(3);
-                    marker = 3;
-                } else if (Pattern.matches(error_p, line)) {
-                    System.out.println("error_str match");
-                    m = kill.matcher(line);
-                    time = m.group(1);
-                    association = Integer.parseInt(m.group(2));
-                    account = m.group(3);
-                    user = m.group(4);
-                    Partition = m.group(5);
-                    add_error(time, association, account, user, Partition);
+                try {
+                    if (Pattern.matches(submit_p, line)) {
+                        m = submit.matcher(line);
+                        time = m.group(1);
+                        JobId = Integer.parseInt(m.group(2));
+                        InitPrio = Integer.parseInt(m.group(3));
+                        usec = Integer.parseInt(m.group(4));
+                        marker = 1;
+                        System.out.println("* submit\t\t match");
+                    } else if (Pattern.matches(sched_p, line)) {
+                        m = sched.matcher(line);
+                        time = m.group(1);
+                        JobId = Integer.parseInt(m.group(2));
+                        NodeList = m.group(3);
+                        CPUs = Integer.parseInt(m.group(4));
+                        Partition = m.group(5);
+                        marker = 2;
+                        System.out.println("* sched\t\t match");
+                    } else if (Pattern.matches(complete_p, line)) {
+                        m = complete.matcher(line);
+                        time = m.group(1);
+                        JobId = Integer.parseInt(m.group(2));
+                        status = m.group(3);
+                        marker = 3;
+                        System.out.println("* complete\t\t match");
+                    } else if (Pattern.matches(error_p, line)) {
+                        m = kill.matcher(line);
+                        time = m.group(1);
+                        association = Integer.parseInt(m.group(2));
+                        account = m.group(3);
+                        user = m.group(4);
+                        Partition = m.group(5);
+                        System.out.println("* error\t\t match");
+                        add_error(time, association, account, user, Partition);
+                    }
+                } catch (IllegalStateException e) {
+                    continue;
                 }
 
                 if (JobId != 0) {
