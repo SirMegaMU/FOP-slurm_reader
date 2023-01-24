@@ -1,4 +1,6 @@
-src/test/test.iml
 /src/test/.idea/
 /src/test/out/
 /.idea/
+*.iml
+*/vcs.xml
+*/misc.xml
