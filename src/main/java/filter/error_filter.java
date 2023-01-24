@@ -21,8 +21,8 @@ public class error_filter {
             DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             LocalDate start_t = LocalDate.parse(start, fmt);
             LocalDate end_t = LocalDate.parse(end, fmt);
-            Table result_p = errors_table.where(errors_table.dateColumn("start").isAfter(start_t));
-            Table result = result_p.where(result_p.dateColumn("end").isBefore(end_t));
+            Table result_p = errors_table.where(errors_table.dateColumn("job_time").isAfter(start_t));
+            Table result = result_p.where(result_p.dateColumn("job_time").isBefore(end_t));
             System.out.println(result);
     }
 }
