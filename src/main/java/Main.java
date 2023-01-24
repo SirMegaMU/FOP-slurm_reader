@@ -1,3 +1,4 @@
+import tech.tablesaw.api.DateColumn;
 import tech.tablesaw.api.IntColumn;
 import tech.tablesaw.api.StringColumn;
 import tech.tablesaw.api.Table;
@@ -5,17 +6,22 @@ import tech.tablesaw.api.Table;
 import java.io.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import fliter.*;
+
 public class Main {
     public static void main(String[] args) throws ParseException, FileNotFoundException {
         System.out.println("FOP-Assignment");
         readfile();
-        System.out.print(jobs);
+        System.out.println("file parse complete");
     }
 
     public static void readfile() {
@@ -25,7 +31,7 @@ public class Main {
                 String line = file_scanner.nextLine();
                 int JobId = 0, InitPrio = 0, usec = 0, uid = 0, CPUs = 0;
                 String NodeList = "", Partition = "", status = "";
-                String time="";
+                String time = "";
                 Matcher m;
 
                 int marker = 0;
@@ -49,7 +55,7 @@ public class Main {
                 if (Pattern.matches(submit_p, line)) {
                     System.out.println("submit match");
                     m = submit.matcher(line);
-                    time=m.group(1);
+                    time = m.group(1);
                     JobId = Integer.parseInt(m.group(2));
                     InitPrio = Integer.parseInt(m.group(3));
                     usec = Integer.parseInt(m.group(4));
@@ -57,7 +63,7 @@ public class Main {
                 } else if (Pattern.matches(sched_p, line)) {
                     System.out.println("sched match");
                     m = sched.matcher(line);
-                    time=m.group(1);
+                    time = m.group(1);
                     JobId = Integer.parseInt(m.group(2));
                     NodeList = m.group(3);
                     CPUs = Integer.parseInt(m.group(4));
@@ -66,14 +72,14 @@ public class Main {
                 } else if (Pattern.matches(complete_p, line)) {
                     System.out.println("complete match");
                     m = complete.matcher(line);
-                    time=m.group(1);
+                    time = m.group(1);
                     JobId = Integer.parseInt(m.group(2));
                     status = m.group(3);
                     marker = 3;
                 } else if (Pattern.matches(error_p, line)) {
                     System.out.println("error match");
                     m = kill.matcher(line);
-                    time=m.group(1);
+                    time = m.group(1);
                     JobId = Integer.parseInt(m.group(2));
                     uid = Integer.parseInt(m.group(3));
                     marker = 4;
@@ -132,14 +138,20 @@ public class Main {
             IntColumn.create("CPUs"),
             StringColumn.create("Partition"),
             StringColumn.create("status"),
-            StringColumn.create("start"),
-            StringColumn.create("end")
+            DateColumn.create("start"),
+            DateColumn.create("end")
     );
+
+    public static LocalDateTime toLocalDateTime(String dateTime) {
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
+        LocalDateTime ldt = LocalDateTime.parse(dateTime, df);
+        return ldt;
+    }
 
     public static class slurm_job {
         int JobId, InitPrio, usec, uid, CPUs;
         String job, NodeList, Partition, status;
-        Date start, end;
+        LocalDateTime start, end;
 
         public slurm_job(int JobId) {
             this.JobId = JobId;
@@ -147,15 +159,10 @@ public class Main {
 
         public void add_time(String s_time) {
             //2022-06-01T09:10:34.641
-            try {
-                SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-ddTHH:mm:ss.SSS");
-                if (this.start == null) {
-                    this.start = ft.parse(s_time);
-                } else {
-                    this.end = ft.parse(s_time);
-                }
-            } catch (ParseException e) {
-                throw new RuntimeException(e);
+            if (this.start == null) {
+                this.start = toLocalDateTime(s_time);
+            } else {
+                this.end = toLocalDateTime(s_time);
             }
         }
 
@@ -171,8 +178,8 @@ public class Main {
                     IntColumn.create("CPUs", new int[]{this.CPUs}),
                     StringColumn.create("Partition", new String[]{this.Partition}),
                     StringColumn.create("status", new String[]{this.status}),
-                    StringColumn.create("start", new String[]{this.start.toString()}),
-                    StringColumn.create("end", new String[]{this.end.toString()})
+                    DateColumn.create("start", new LocalDate[]{this.start.toLocalDate()}),
+                    DateColumn.create("end", new LocalDate[]{this.end.toLocalDate()})
             );
             jobs.append(job);
             job_map.remove(this.JobId);
