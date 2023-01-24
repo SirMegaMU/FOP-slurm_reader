@@ -13,9 +13,11 @@ public class Main {
         Scanner key = new Scanner(System.in);
         System.out.println("****************************************");
         System.out.println("*****  type the path of log file   *****");
-        System.out.print("* > :");
+        System.out.print("* (d-default) > :");
         file_loc = key.next();
-        file_loc = "/home/megamu/Documents/FOP-Assignment/src/main/resources/extracted_log";
+        if (file_loc == "d") {
+            file_loc = "/home/megamu/Documents/FOP-Assignment/src/main/resources/extracted_log";
+        }
         System.out.println("****************************************");
         System.out.println("**********   loading files    **********");
         System.out.println("****************************************\n");
@@ -23,8 +25,8 @@ public class Main {
         System.out.println("****************************************");
         System.out.println("**********      complete      **********");
         System.out.println("****************************************");
-        System.out.println("* success : "+res[0]);
-        System.out.println("* fail    : "+res[1]);
+        System.out.println("* success : " + res[0]);
+        System.out.println("* fail    : " + res[1]);
         main_page();
     }
 }
