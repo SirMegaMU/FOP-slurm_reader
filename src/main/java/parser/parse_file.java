@@ -10,9 +10,9 @@ import java.util.regex.Pattern;
 import static parser.slurm_error.add_error;
 
 public class parse_file {
-    public static void readfile(HashMap<Integer, slurm_job> job_map) {
+    public static void readfile(String fileloc,HashMap<Integer, slurm_job> job_map) {
         try {
-            Scanner file_scanner = new Scanner(new File("src/main/resources/extracted_log"));
+            Scanner file_scanner = new Scanner(new File(fileloc));
             while (file_scanner.hasNextLine()) {
                 String line = file_scanner.nextLine();
                 int JobId = 0, InitPrio = 0, usec = 0, uid = 0, CPUs = 0, association = 0;
