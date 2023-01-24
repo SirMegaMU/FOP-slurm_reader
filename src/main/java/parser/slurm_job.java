@@ -34,7 +34,7 @@ public class slurm_job {
             this.end = this.start;
         }
         this.status = s_status;
-        Table job = Table.create("Jobs table").addColumns(
+        Table job = Table.create("Job table").addColumns(
                 IntColumn.create("JobId", new int[]{this.JobId}),
                 StringColumn.create("Main", new String[]{this.job}),
                 IntColumn.create("InitPrio", new int[]{this.InitPrio}),

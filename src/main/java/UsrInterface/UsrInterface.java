@@ -5,30 +5,29 @@ import java.util.Scanner;
 
 import static data_structure.data.errors;
 import static data_structure.data.jobs;
-import static filter.error_str.err_get_by_string;
-import static filter.error_time.err_get_by_time;
-import static filter.job_str.job_get_by_string;
-import static filter.job_time.job_get_by_time;
+import static filter.error_filter.err_get_by_string;
+import static filter.error_filter.err_get_by_time;
+import static filter.job_filter.job_get_by_string;
+import static filter.job_filter.job_get_by_time;
 
 public class UsrInterface {
     public static void main_page() {
-        System.out.println("\n\n");
-        System.out.println("------------------------------");
+        System.out.println("****************************************");
         System.out.println("* 1 : show data");
-        System.out.println("* 2 : filter data by String");
-        System.out.println("* 3 : filter data by Time");
+        System.out.println("* 2 : filter data by Column Name");
+        System.out.println("* 3 : filter data by Time (yyyy-MM-dd) ");
         System.out.println("* q : quit");
-        System.out.println("------------------------------");
+        System.out.println("****************************************");
         System.out.print("* > : ");
         Scanner key = new Scanner(System.in);
         String choice = key.nextLine();
         if (Objects.equals(choice, "1")) {
-            System.out.println("------------------------------");
+            System.out.println("****************************************");
             System.out.print("choose the data sheet you want (jobs/errors) : ");
             String name = key.nextLine();
             show_data(name);
         } else if (Objects.equals(choice, "2")) {
-            System.out.println("------------------------------");
+            System.out.println("****************************************");
             System.out.print("choose the data sheet you want (jobs/errors) : ");
             String name = key.nextLine();
             System.out.print("type the filter you want  : ");
@@ -37,7 +36,7 @@ public class UsrInterface {
             String content = key.nextLine();
             filter_by_str(name, filter, content);
         } else if (Objects.equals(choice, "3")) {
-            System.out.println("------------------------------");
+            System.out.println("****************************************");
             System.out.print("choose the data sheet you want (jobs/errors) : ");
             String name = key.nextLine();
             System.out.print("type the start time you want : ");

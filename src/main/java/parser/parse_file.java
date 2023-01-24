@@ -36,7 +36,7 @@ public class parse_file {
                 String kill_p = "\\[(.*T.*)\\] _slurm_rpc_kill_job: REQUEST_KILL_JOB JobId=([0-9]*) uid ([0-9]*)";
                 Pattern kill = Pattern.compile(kill_p);
 
-                // [2022-06-01T15:12:23.290] error_str: This association 187(account='free', user='lobbeytan', job_str='(null)') does not have access to qos long
+                // [2022-06-01T15:12:23.290] error_filter: This association 187(account='free', user='lobbeytan', job_filter='(null)') does not have access to qos long
                 String error_p = "\\[(.*T.*)\\] error: This association ([0-9]*)\\(account='(.*)', user='(.*)', partition='(.*)'\\) (.*?)";
                 Pattern error = Pattern.compile(error_p);
 
@@ -97,25 +97,29 @@ public class parse_file {
                 if (JobId != 0) {
                     if (job_map.containsKey(JobId)) {
                         if (marker == 1) {
+                            job_map.get(JobId).add_time(time);
                             job_map.get(JobId).InitPrio = InitPrio;
                             job_map.get(JobId).usec = usec;
                             job_map.get(JobId).add_time(time);
                         } else if (marker == 2) {
+                            job_map.get(JobId).add_time(time);
                             job_map.get(JobId).NodeList = NodeList;
                             job_map.get(JobId).CPUs = CPUs;
                             job_map.get(JobId).Partition = Partition;
                         } else if (marker == 3) {
-                            job_map.get(JobId).status = status;
                             job_map.get(JobId).add_time(time);
+                            job_map.get(JobId).end(status);
                         }
                     } else {
                         slurm_job job = new slurm_job(JobId);
                         job_map.put(JobId, job);
                         if (marker == 1) {
+                            job_map.get(JobId).add_time(time);
                             job_map.get(JobId).InitPrio = InitPrio;
                             job_map.get(JobId).usec = usec;
                             job_map.get(JobId).add_time(time);
                         } else if (marker == 2) {
+                            job_map.get(JobId).add_time(time);
                             job_map.get(JobId).NodeList = NodeList;
                             job_map.get(JobId).CPUs = CPUs;
                             job_map.get(JobId).Partition = Partition;

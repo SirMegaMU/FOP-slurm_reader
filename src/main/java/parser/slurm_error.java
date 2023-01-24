@@ -14,7 +14,7 @@ import static formatter.time_formatter.toLocalDateTime;
 public class slurm_error {
     public static void add_error(String s_time, int association, String account, String user, String Partition) {
         LocalDateTime time = toLocalDateTime(s_time);
-        Table error = Table.create("error_str").addColumns(
+        Table error = Table.create("error_filter").addColumns(
                 DateColumn.create("job_time", new LocalDate[]{time.toLocalDate()}),
                 IntColumn.create("association", new int[]{association}),
                 StringColumn.create("account", new String[]{account}),
