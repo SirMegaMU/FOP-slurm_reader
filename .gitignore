@@ -5,3 +5,4 @@
 *.xml
 *.class
 !pom.xml
+!/target/*.jar
