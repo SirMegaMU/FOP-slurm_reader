@@ -17,12 +17,12 @@ public class job_filter {
 
     }
 
-    public static void job_get_by_time(@NotNull Table jobs_table, String start, String end) {
-            DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            LocalDate start_t = LocalDate.parse(start, fmt);
-            LocalDate end_t = LocalDate.parse(end, fmt);
-            Table result_p = jobs_table.where(jobs_table.dateColumn("start").isAfter(start_t));
-            Table result = result_p.where(result_p.dateColumn("end").isBefore(end_t));
-            System.out.println(result);
+    public static void job_get_by_time(@NotNull Table jobs_table, String filter, String start, String end) {
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate start_t = LocalDate.parse(start, fmt);
+        LocalDate end_t = LocalDate.parse(end, fmt);
+        Table result_p = jobs_table.where(jobs_table.dateColumn(filter).isAfter(start_t));
+        Table result = result_p.where(result_p.dateColumn(filter).isBefore(end_t));
+        System.out.println(result);
     }
 }

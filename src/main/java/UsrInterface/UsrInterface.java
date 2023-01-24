@@ -83,14 +83,16 @@ public class UsrInterface {
     }
 
     public static void filter_by_time(String name, String start, String end) {
+        Scanner key = new Scanner(System.in);
         if (Objects.equals(name, "jobs")) {
-            job_get_by_time(jobs, start, end);
+            System.out.print(" - which time to select(start/end):");
+            String filter=key.nextLine();
+            job_get_by_time(jobs, filter, start, end);
         } else if (Objects.equals(name, "errors")) {
             err_get_by_time(errors, start, end);
         } else {
             System.out.println("Unknown data name");
         }
-        Scanner key = new Scanner(System.in);
         String input = key.nextLine();
         if (Objects.equals(input, "q")) {
             main_page();
